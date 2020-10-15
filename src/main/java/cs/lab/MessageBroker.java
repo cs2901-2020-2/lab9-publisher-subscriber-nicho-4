@@ -1,16 +1,14 @@
 package cs.lab;
 
 import java.util.Hashtable;
-import java.util.List;
+import java.util.Vector;
 
 public class MessageBroker {
-    private Hashtable<String, List<Subscriber>> subscriberList;
+    private Hashtable<String, Vector<Subscriber>> subscriberList;
 
     private static MessageBroker serverInstance;
 
-    private MessageBroker(){
-        this.subscriberList = new Hashtable<>();
-    }
+    private MessageBroker(){this.subscriberList = new Hashtable<>();}
 
     public static MessageBroker getInstance() {
         if (serverInstance == null) {
@@ -19,19 +17,27 @@ public class MessageBroker {
         return serverInstance;
     }
 
-    public void registerSubscriber(Subscriber s, String channel){
-        erList.get(channel).add(s);
-    };
-
-    public void removeSubscriber(Subscriber s, String channel){
-        subscriberList.get(channel).remove(s);
-    }
-    
-    public void notifySubscribers(String channel){
-        List<Subscriber> subs = subscriberList.get(channel);
-        for (Subscriber i : subs) {
-            i.receivedNotification();
+    public void registerSubscriber(Subscriber S, String topic){
+        if(this.subscriberList.get(topic)==null){
+            Vector<Subscriber> newlist = new Vector<Subscriber>();
+            newlist.add(S);
+            this.subscriberList.put(topic,newlist);
+        }else {
+            subscriberList.get(topic).add(S);
         }
     };
 
+    public void removeSubscriber(Subscriber s, String topic){
+        subscriberList.get(topic).remove(s);
+    }
+    
+    public void notifySubscribers(String topic){
+        Vector<Subscriber> Subscriberstopic=subscriberList.get(topic);
+        for (Subscriber i:Subscriberstopic){
+            i.newmessage();
+        }
+    };
+    public int sizeHashtable(String topic){
+        return this.subscriberList.get(topic).size();
+    }
 }

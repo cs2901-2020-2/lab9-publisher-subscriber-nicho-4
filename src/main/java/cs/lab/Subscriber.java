@@ -1,14 +1,15 @@
 package cs.lab;
 
 public class Subscriber {
-    criber subcriscriber;
     private boolean received = false;
 
-    public void subscribe(String channel){
-        MessageBroker.getInstance().registerSubscriber(subscriber, channel);
+    public Subscriber(String topic){
+        MessageBroker.getInstance().registerSubscriber(this,topic);
     }
-
-    public void receivedNotification(){
-        received = true;
+    public void newmessage(){
+        this.received=Boolean.TRUE;
+    };
+    public boolean receivedNotification(){
+        return received;
     }
 }
